@@ -14,7 +14,7 @@ async function seed() {
   process.exit(0)
 }
 
-async function createUser(username, password) {
+async function createUser(username, password, role) {
   const posts = []
 
   for (let i = 0; i < username.length; i++) {
@@ -27,7 +27,8 @@ async function createUser(username, password) {
       passwordHash: await bcrypt.hash(password, 6),
       posts: {
         create: posts
-      }
+      },
+			role: role ? role : "USER"
     },
     include: {
       posts: true

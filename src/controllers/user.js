@@ -14,6 +14,7 @@ const createUser = async (req, res) => {
   }
 
   try {
+		const hashedPassword = await bcrypt()
     const createdUser = await createUserDb(username, password)
 
     return res.status(201).json({ user: createdUser })
@@ -24,7 +25,7 @@ const createUser = async (req, res) => {
       }
     }
 
-    res.status(500).json({ error: e.message })
+    return res.status(500).json({ error: "something went wrong" })
   }
 }
 

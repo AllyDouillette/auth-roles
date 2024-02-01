@@ -1,5 +1,6 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client")
 const { createUserDb } = require('../domains/user.js')
+const { hashPassword, comparePassword } = require("../utils/authentication.js")
 
 const createUser = async (req, res) => {
   const {
@@ -14,8 +15,7 @@ const createUser = async (req, res) => {
   }
 
   try {
-		const hashedPassword = await bcrypt()
-    const createdUser = await createUserDb(username, password)
+    const createdUser = await createUserDb(username, password, "USER")
 
     return res.status(201).json({ user: createdUser })
   } catch (e) {

@@ -1,6 +1,32 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createUserDb, getUsersDb } = require('../domains/user.js')
-const { hashPassword, comparePassword } = require("../utils/authentication.js")
+const { createUserDb, getUsersDb, getUserDb } = require('../domains/user.js')
+const { hashPassword, comparePassword, createToken, verifyToken } = require("../utils/authentication.js")
+
+const authenticate = async (req, res) => {
+	const {
+		username,
+		password
+	} = req.body
+
+  if (!username || !password) {
+    return res.status(400).json({
+      error: "Missing fields in request body"
+    })
+  }
+
+
+	try {
+		const user = await getUserDb(username)
+
+		if ( await comparePassword(password, user.passwordHash) ) {
+			const token = createToken({ sub: user.id })
+			return res.status(200).json({ token })
+		}
+	} catch (error) {
+		console.log(error)
+		return res.status(401).json({ error: "invalid credentials"})
+	}
+}
 
 const createUser = async (req, res) => {
   const {
@@ -30,7 +56,6 @@ const createUser = async (req, res) => {
 }
 
 const getUsers = async (req, res) => {
-	
 	try {
 		const users = await getUsersDb()
 		return res.json({ users })
@@ -42,5 +67,6 @@ const getUsers = async (req, res) => {
 
 module.exports = {
   createUser,
-	getUsers
+	getUsers,
+	authenticate
 }

@@ -1,4 +1,5 @@
 const { verifyToken, extractToken, hasAuthorization } = require("../utils/authentication.js")
+const { getUserByIdDb } = require("../domains/user.js")
 
 const checkToken = (req, res, next) => {
 	if (!hasAuthorization(req)) {
@@ -21,7 +22,14 @@ const checkToken = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
 	const token = extractToken(req).token
-	console.log(token,token.sub)
+
+	const userId = verifyToken(token).sub
+	const user = getUserByIdDb(userId)
+
+	if (user.id !== "ADMIN") {
+		return res.status(401).json({ error: "Unauthorized"})
+	}
+
 	next()
 }
 

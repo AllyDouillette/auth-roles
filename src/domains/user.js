@@ -1,24 +1,31 @@
 const prisma = require('../utils/prisma')
 const bcrypt = require('bcrypt')
 
-const createUserDb = async (username, password, role) => await prisma.user.create({
+const createUserDb = async (username, password, role = "USER") => await prisma.user.create({
   data: {
     username,
-    passwordHash: await bcrypt.hash(password, 6),
-		role: role ? role : "USER"
+		role: role,
+    passwordHash: await bcrypt.hash(password, 6)
   }
 })
 
 const getUsersDb = async () => await prisma.user.findMany()
 
-const getUserDb = async (username) => await prisma.user.findUnique({
+const getUserByUsernameDb = async (username) => await prisma.user.findUnique({
 	where: {
 		username
 	}
 	})
 
+const getUserByIdDb = async (id) => await prisma.user.findUnique({
+	where: {
+		id
+	}
+	})
+
 module.exports = {
   createUserDb,
-	getUserDb,
+	getUserByUsernameDb,
+	getUserByIdDb,
 	getUsersDb
 }

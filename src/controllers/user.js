@@ -1,5 +1,8 @@
 const { PrismaClientKnownRequestError } = require("@prisma/client")
-const { createUserDb, getUsersDb, getUserDb } = require('../domains/user.js')
+const { createUserDb,
+				getUsersDb,
+				getUserByIdDb,
+				getUserByUsernameDb } = require('../domains/user.js')
 const { hashPassword, comparePassword, createToken, verifyToken } = require("../utils/authentication.js")
 
 const authenticate = async (req, res) => {
@@ -16,7 +19,7 @@ const authenticate = async (req, res) => {
 
 
 	try {
-		const user = await getUserDb(username)
+		const user = await getUserByUsernameDb(username)
 
 		if ( await comparePassword(password, user.passwordHash) ) {
 			const token = createToken({ sub: user.id })
@@ -30,7 +33,8 @@ const authenticate = async (req, res) => {
 const createUser = async (req, res) => {
   const {
     username,
-    password
+    password,
+		role
   } = req.body
 
   if (!username || !password) {
@@ -40,7 +44,8 @@ const createUser = async (req, res) => {
   }
 
   try {
-    const createdUser = await createUserDb(username, password, "USER")
+		console.log(username, password, role)
+    const createdUser = await createUserDb(username, password, role)
 
     return res.status(201).json({ user: createdUser })
   } catch (e) {

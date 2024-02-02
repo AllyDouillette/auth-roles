@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 
-const secret = process.env.SECRET
+const secret = process.env.JWT_SECRET
 
 const hashPassword = async (plainPassword) => await bcrypt.hash(plainPassword, 12);
 

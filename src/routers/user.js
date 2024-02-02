@@ -5,13 +5,13 @@ const {
 	authenticate
 } = require('../controllers/user');
 
-const { checkToken }  = require("../middleware/verify")
+const { checkToken, isAdmin }  = require("../middleware/verify")
 
 const router = express.Router();
 
 //prefix: "/users/"
 router.get("/auth", authenticate)
 router.post("/", createUser);
-router.get("/", checkToken, getUsers);
+router.get("/", checkToken, isAdmin, getUsers);
 
 module.exports = router;

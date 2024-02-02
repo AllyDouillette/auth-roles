@@ -1,15 +1,13 @@
-const { verifyToken } = require("../utils/authentication.js")
+const { verifyToken, extractToken, hasAuthorization } = require("../utils/authentication.js")
 
 const checkToken = (req, res, next) => {
-	const authentication = req.header("authorization")
-
-	if (!authentication) {
+	if (!hasAuthorization(req)) {
 		res.status(400).json({
       error: "Missing authorization in request body"
     })
 	}
 
-	const [_, token] = authentication
+	const token = extractToken(req).token
 	const decodedToken = verifyToken(token)
 
 	if (!decodedToken) {
@@ -21,4 +19,10 @@ const checkToken = (req, res, next) => {
 	next()
 }
 
-module.exports = { checkToken }
+const isAdmin = (req, res, next) => {
+	const token = extractToken(req).token
+	console.log(token,token.sub)
+	next()
+}
+
+module.exports = { checkToken, isAdmin }

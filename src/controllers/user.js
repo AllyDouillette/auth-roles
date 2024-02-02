@@ -23,7 +23,6 @@ const authenticate = async (req, res) => {
 			return res.status(200).json({ token })
 		}
 	} catch (error) {
-		console.log(error)
 		return res.status(401).json({ error: "invalid credentials"})
 	}
 }
@@ -56,6 +55,7 @@ const createUser = async (req, res) => {
 }
 
 const getUsers = async (req, res) => {
+
 	try {
 		const users = await getUsersDb()
 		return res.json({ users })

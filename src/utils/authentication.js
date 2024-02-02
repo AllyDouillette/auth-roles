@@ -10,6 +10,14 @@ const comparePassword = async (plainPassword, hashedPassword) => await bcrypt.co
 
 const createToken = (payload) => jwt.sign(payload, secret)
 
+const hasAuthorization = (req) => req.header("authorization")
+
+const extractToken = (req) => {
+	const authentication = req.header("authorization")
+	const [type, token] = authentication.split(" ")
+	return { type, token } 
+}
+
 const verifyToken = (token) => {
 	try {
 		return jwt.verify(token, secret)
@@ -22,5 +30,7 @@ module.exports = {
 	hashPassword,
 	comparePassword,
 	createToken,
+	hasAuthorization,
+	extractToken,
 	verifyToken
 	}

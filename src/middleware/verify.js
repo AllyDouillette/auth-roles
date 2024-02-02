@@ -26,7 +26,7 @@ const isAdmin = (req, res, next) => {
 	const userId = verifyToken(token).sub
 	const user = getUserByIdDb(userId)
 
-	if (user.id !== "ADMIN") {
+	if (user.role !== "ADMIN") {
 		return res.status(401).json({ error: "Unauthorized"})
 	}
 

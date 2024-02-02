@@ -20,7 +20,7 @@ model User {
   updatedAt     DateTime  @updatedAt
 
   posts         Post[]
-	role					Role
+	role					Role			@default(USER)
 }
 
 model Post {

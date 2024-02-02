@@ -8,9 +8,9 @@ const hashPassword = async (plainPassword) => await bcrypt.hash(plainPassword, 1
 
 const comparePassword = async (plainPassword, hashedPassword) => await bcrypt.compare(plainPassword, hashedPassword)
 
-const createToken = (payload, secret) => jwt.sign(payload, secret)
+const createToken = (payload) => jwt.sign(payload, secret)
 
-const verifyToken = (token, secret) => {
+const verifyToken = (token) => {
 	try {
 		return jwt.verify(token, secret)
 	} catch (error) {

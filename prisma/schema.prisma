@@ -35,5 +35,5 @@ model Post {
 
 enum Role {
 	USER
-	ROLE
+	ADMIN
 }

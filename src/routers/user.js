@@ -12,6 +12,6 @@ const router = express.Router();
 //prefix: "/users/"
 router.get("/auth", authenticate)
 router.post("/", createUser);
-router.get("/", checkToken, isAdmin, getUsers);
+router.get("/", isAdmin, getUsers);
 
 module.exports = router;

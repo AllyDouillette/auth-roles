@@ -20,14 +20,14 @@ const checkToken = (req, res, next) => {
 	next()
 }
 
-const isAdmin = (req, res, next) => {
+const isAdmin = async (req, res, next) => {
 	const token = extractToken(req).token
 
 	const userId = verifyToken(token).sub
-	const user = getUserByIdDb(userId)
+	const user = await getUserByIdDb(userId)
 
 	if (user.role !== "ADMIN") {
-		return res.status(401).json({ error: "Unauthorized"})
+		return res.status(403).json({ error: "missing permissions"})
 	}
 
 	next()

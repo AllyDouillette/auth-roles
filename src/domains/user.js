@@ -1,13 +1,16 @@
+const { Role } = require('@prisma/client')
 const prisma = require('../utils/prisma')
 const bcrypt = require('bcrypt')
 
-const createUserDb = async (username, password, role = "USER") => await prisma.user.create({
-  data: {
-    username,
-		role: role,
-    passwordHash: await bcrypt.hash(password, 6)
-  }
-})
+const createUserDb = async (username, password, role = "USER") => {
+	return await prisma.user.create({
+		data: {
+			username,
+			role: role,
+			passwordHash: await bcrypt.hash(password, 6)
+		}
+	})
+}
 
 const getUsersDb = async () => await prisma.user.findMany()
 

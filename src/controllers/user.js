@@ -53,8 +53,10 @@ const createUser = async (req, res) => {
       if (e.code === "P2002") {
         return res.status(409).json({ error: "A user with the provided username already exists" })
       }
+			console.log(e, "PRISMA error")
     }
 
+		console.log(e, "OTHER error")
     return res.status(500).json({ error: "something went wrong" })
   }
 }

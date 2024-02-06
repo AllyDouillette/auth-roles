@@ -71,11 +71,16 @@ const getUsers = async (req, res) => {
 
 const deleteUser = async (req, res) => {
 	try {
-		const { id } = req.params
-		const user = await deleteUserDb(id)
+		const id = Number(req.params.id)
+		const user = await deleteUserByIdDb(id)
 		return res.json({ user })
 	} catch (error) {
-		return res.status(error.code).json({ error: "something went wrong" })
+		if (error instanceof PrismaClientKnownRequestError) {
+			if (error.code === "P2025") {
+        return res.status(409).json({ error: "A user with the provided ID does not exist" })
+      }
+		}
+		return res.status(500).json({ error: "something went wrong" })
 	}
 }
 

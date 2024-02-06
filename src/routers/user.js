@@ -6,7 +6,7 @@ const {
 	deleteUser
 } = require('../controllers/user');
 
-const { checkToken, isAdmin }  = require("../middleware/verify")
+const { checkToken, isAdmin, isAdminOrSelf }  = require("../middleware/verify")
 
 const router = express.Router();
 
@@ -14,6 +14,6 @@ const router = express.Router();
 router.get("/auth", authenticate)
 router.post("/", createUser);
 router.get("/", isAdmin, getUsers);
-router.delete("/:id", isAdmin, deleteUser)
+router.delete("/:id", isAdminOrSelf, deleteUser)
 
 module.exports = router;

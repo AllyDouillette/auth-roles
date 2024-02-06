@@ -33,4 +33,22 @@ const isAdmin = async (req, res, next) => {
 	next()
 }
 
-module.exports = { checkToken, isAdmin }
+const isAdminOrSelf = async (req, res, next) => {
+	const token = extractToken(req).token
+	const id = Number(req.params.id)
+	const userId = verifyToken(token).sub
+
+	if (userId === id) {
+		next()
+	}
+
+	const user = await getUserByIdDb(userId)
+	if (user.role !== "ADMIN") {
+		return res.status(403).json({ error: "missing permissions"})
+	}
+
+	next()
+
+}
+
+module.exports = { checkToken, isAdmin, isAdminOrSelf }

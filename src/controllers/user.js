@@ -2,6 +2,7 @@ const { PrismaClientKnownRequestError } = require("@prisma/client")
 const { createUserDb,
 				getUsersDb,
 				getUserByIdDb,
+				deleteUserByIdDb,
 				getUserByUsernameDb } = require('../domains/user.js')
 const { hashPassword, comparePassword, createToken, verifyToken } = require("../utils/authentication.js")
 
@@ -44,9 +45,7 @@ const createUser = async (req, res) => {
   }
 
   try {
-		console.log(username, password, role)
     const createdUser = await createUserDb(username, password, role)
-
     return res.status(201).json({ user: createdUser })
   } catch (e) {
     if (e instanceof PrismaClientKnownRequestError) {
@@ -62,18 +61,28 @@ const createUser = async (req, res) => {
 }
 
 const getUsers = async (req, res) => {
-
 	try {
 		const users = await getUsersDb()
 		return res.json({ users })
 	} catch (error) {
 		return { error: "something went wrong" }
 	}
+}
 
+const deleteUser = async (req, res) => {
+	try {
+		const { userId } = req.query
+		console.log(userid)
+		const user = await deleteUserDb(userId)
+		return res.json({ user })
+	} catch (error) {
+		return res.status(error.code).json({ error: "something went wrong" })
+	}
 }
 
 module.exports = {
   createUser,
 	getUsers,
-	authenticate
+	authenticate,
+	deleteUser
 }

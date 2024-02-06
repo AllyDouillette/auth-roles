@@ -71,9 +71,8 @@ const getUsers = async (req, res) => {
 
 const deleteUser = async (req, res) => {
 	try {
-		const { userId } = req.query
-		console.log(userid)
-		const user = await deleteUserDb(userId)
+		const { id } = req.params
+		const user = await deleteUserDb(id)
 		return res.json({ user })
 	} catch (error) {
 		return res.status(error.code).json({ error: "something went wrong" })
